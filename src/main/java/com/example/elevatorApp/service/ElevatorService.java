@@ -22,6 +22,7 @@ public class ElevatorService {
     private final int floorTravelTime = 1000; // Time in milliseconds for elevator to travel 1 floor (5 seconds)
     private final int doorOperationTime = 100; // Time for door to open in milliseconds
     private final ElevatorRepository elevatorRepository;
+    private final LogService logService;
 
     public ResponseEntity<Response> callElevator(int fromFloor, int toFloor) {
         if (fromFloor < 0 || toFloor > numFloors) {
@@ -29,7 +30,7 @@ public class ElevatorService {
         }
 
         // Find an available elevator
-        Elevator elevator = findAvailableElevator(fromFloor);
+        Elevator elevator = findAvailableElevator(fromFloor, toFloor);
 
         // If no elevator is available, return message
         if (elevator == null) {
@@ -40,6 +41,7 @@ public class ElevatorService {
         elevator.setState(ElevatorState.MOVING);
         elevator.setDirection(calculateDirection(elevator.getCurrentFloor(), fromFloor));
         elevatorRepository.save(elevator);
+        logService.logElevatorStateChanged(elevator.getId(), elevator.getState(), elevator.getDirection(), elevator.getCurrentFloor());
 
         // Start moving the elevator asynchronously
         moveElevatorAsync(elevator, fromFloor);
@@ -49,12 +51,14 @@ public class ElevatorService {
         elevator.setState(ElevatorState.MOVING);
         elevator.setDirection(direction2);
         elevatorRepository.save(elevator);
+        logService.logElevatorStateChanged(elevator.getId(), elevator.getState(), elevator.getDirection(), elevator.getCurrentFloor());
 
         // Once it reaches the floor it was called from, begin moving to floor called to
         moveElevatorAsync(elevator, toFloor);
         elevator.setState(ElevatorState.IDLE);
         elevator.setDirection(ElevatorDirection.IDLE);
         elevatorRepository.save(elevator);
+        logService.logElevatorStateChanged(elevator.getId(), elevator.getState(), elevator.getDirection(), elevator.getCurrentFloor());
 
         return ResponseEntity.ok().body(new Response("Elevator called successfully"));
     }
@@ -67,12 +71,13 @@ public class ElevatorService {
                 if (elevator.getCurrentFloor() < 10) {
                     elevator.setCurrentFloor(elevator.getCurrentFloor() + 1);
                     elevatorRepository.save(elevator);
-
+                    logService.logElevatorStateChanged(elevator.getId(), elevator.getState(), elevator.getDirection(), elevator.getCurrentFloor());
                 }
             } else if (elevator.getDirection() == ElevatorDirection.DOWN) {
                 if (elevator.getCurrentFloor() > 1) {
                     elevator.setCurrentFloor(elevator.getCurrentFloor() - 1);
                     elevatorRepository.save(elevator);
+                    logService.logElevatorStateChanged(elevator.getId(), elevator.getState(), elevator.getDirection(), elevator.getCurrentFloor());
                 }
 
             }
@@ -90,6 +95,8 @@ public class ElevatorService {
         elevator.setState(ElevatorState.STOPPED);
         elevator.setDirection(ElevatorDirection.IDLE);
         elevatorRepository.save(elevator);
+        logService.logElevatorStateChanged(elevator.getId(), elevator.getState(), elevator.getDirection(), elevator.getCurrentFloor());
+        logService.logElevatorArrived(elevator.getId(), elevator.getCurrentFloor());
 
         // Simulate opening of doors
         try {
@@ -98,12 +105,13 @@ public class ElevatorService {
             Thread.currentThread().interrupt();
         }
     }
-    private Elevator findAvailableElevator(int fromFloor) {
+    private Elevator findAvailableElevator(int fromFloor, int toFloor) {
         List<Elevator> elevators = elevatorRepository.findAll();
 
         for (Elevator elevator : elevators) {
             if (elevator.getState() == ElevatorState.IDLE) {
                 if (isElevatorReachable(elevator, fromFloor)) {
+                    logService.logElevatorCalled(elevator.getId(), fromFloor, toFloor);
                     return elevator;
                 }
             }
