@@ -3,6 +3,7 @@ package com.example.elevatorApp.service;
 import com.example.elevatorApp.entity.Elevator;
 import com.example.elevatorApp.enums.ElevatorDirection;
 import com.example.elevatorApp.enums.ElevatorState;
+import com.example.elevatorApp.model.pojo.ElevatorStatus;
 import com.example.elevatorApp.model.response.Response;
 import com.example.elevatorApp.repository.ElevatorRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -134,6 +136,21 @@ public class ElevatorService {
         }
     }
 
+    public ResponseEntity<List<ElevatorStatus>> getElevatorStatus() {
+        List<ElevatorStatus> elevatorStatusList = new ArrayList<>();
+        List<Elevator> elevators = elevatorRepository.findAll();
+        // maybe use streams here?
+        for (Elevator elevator : elevators) {
+            int currentFloor = elevator.getCurrentFloor();
+            ElevatorState state = elevator.getState();
+            ElevatorDirection direction = elevator.getDirection();
+
+            ElevatorStatus elevatorStatus = new ElevatorStatus(currentFloor, state, direction);
+            elevatorStatusList.add(elevatorStatus);
+        }
+
+        return ResponseEntity.ok().body(elevatorStatusList);
+    }
     @EventListener(ApplicationReadyEvent.class)
     public void initializeElevators() {
         // Initialize 2 elevators, all initially at ground floor
