@@ -11,9 +11,11 @@ Schema
 TBL_ELEVATOR
 <img width="676" alt="Screenshot 2023-07-10 at 09 46 29" src="https://github.com/kevmgb/elevatorApp/assets/46866870/9ed7d5b0-0f81-478b-a4f3-c545ebe88f68">
 TBL_LOG
-![image](https://github.com/kevmgb/elevatorApp/assets/46866870/1466d5fa-9056-4a39-816d-cee1be03a0fc)
+![image](https://github.com/kevmgb/elevatorApp/assets/46866870/92a82cdc-5548-4edf-a90a-f93158559f76)
+
 TBL_QUERY_LOGS
-![image](https://github.com/kevmgb/elevatorApp/assets/46866870/a3412ba2-e4be-4593-b10f-adbac3b9b71e)
+![image](https://github.com/kevmgb/elevatorApp/assets/46866870/265677fa-1616-4c5e-8746-4ef9285fc978)
+
 
 ## Features
 1. Call elevator from one floor to another
