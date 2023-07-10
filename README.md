@@ -40,4 +40,4 @@ To install and run the Sample Service locally, follow these steps:
 Once service is running, use the link http://localhost:8080/swagger-ui/index.html to view documentation.
 
 ## Usage
-Use collection below to access the api. https://api.postman.com/collections/8144754-7ee499dd-246d-45c2-94cc-d481a122ae7c?access_key=PMAT-01H4Z9B83WG1MSJBDE9KP8ZBTJ
+Please find attached the collection to use in the static folder i.e static/Elevator Api.postman_collection.json
