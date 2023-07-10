@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "7ee499dd-246d-45c2-94cc-d481a122ae7c",
+		"name": "Elevator Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8144754"
+	},
+	"item": [
+		{
+			"name": "Call Elevator",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{local}}/api/v1/elevator/call?fromFloor=3&toFloor=1",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"elevator",
+						"call"
+					],
+					"query": [
+						{
+							"key": "fromFloor",
+							"value": "3"
+						},
+						{
+							"key": "toFloor",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Elevator Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/api/v1/elevator/statuses",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"elevator",
+						"statuses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Logs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}/api/v1/elevator/logs",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"elevator",
+						"logs"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}
